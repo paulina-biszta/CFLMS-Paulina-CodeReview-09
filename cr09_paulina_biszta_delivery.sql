@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 11, 2020 at 12:54 AM
+-- Generation Time: Jul 11, 2020 at 03:17 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -116,7 +116,7 @@ CREATE TABLE `employee` (
 
 INSERT INTO `employee` (`employee_id`, `name`, `gender`, `salary`, `fk_postoffice_id`) VALUES
 (1, 'Marina', 'F', 4800, 1),
-(2, 'Theo', 'F', 2350, 2),
+(2, 'Theo', 'F', 2350, 4),
 (3, 'Acilio', 'M', 3000, 2),
 (4, 'Serri', 'M', 3570, 3);
 
@@ -139,11 +139,11 @@ CREATE TABLE `package_mail` (
 --
 
 INSERT INTO `package_mail` (`item_id`, `weight`, `size`, `type`, `fk_customer_id`) VALUES
-(1, 2, 'M', 'package', 2),
-(2, 5, 'XL', 'package', 1),
+(1, 2, 'M', 'package', 1),
+(2, 5, 'XL', 'package', 2),
 (3, 1, 'S', 'mail', 3),
 (4, 7, 'XL', 'package', 4),
-(5, 3, 'M', 'package', 5),
+(5, 3, 'M', 'mail', 5),
 (6, 1, 'S', 'mail', 6);
 
 -- --------------------------------------------------------
@@ -154,7 +154,7 @@ INSERT INTO `package_mail` (`item_id`, `weight`, `size`, `type`, `fk_customer_id
 
 CREATE TABLE `postbox` (
   `postbox_id` int(11) NOT NULL,
-  `fk_item_id` int(11) DEFAULT NULL,
+  `fk_itembox_id` int(11) DEFAULT NULL,
   `fk_postbox_addresse_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -162,7 +162,7 @@ CREATE TABLE `postbox` (
 -- Dumping data for table `postbox`
 --
 
-INSERT INTO `postbox` (`postbox_id`, `fk_item_id`, `fk_postbox_addresse_id`) VALUES
+INSERT INTO `postbox` (`postbox_id`, `fk_itembox_id`, `fk_postbox_addresse_id`) VALUES
 (1, 1, 2),
 (2, 3, 3),
 (3, 2, 1);
@@ -209,12 +209,12 @@ CREATE TABLE `postoffice` (
 --
 
 INSERT INTO `postoffice` (`postoffice_id`, `deposited_date`, `fk_postoffice_addresse_id`, `fk_item_id`, `fk_courier_id`) VALUES
-(1, '2020-05-11 15:30:00', 1, 2, NULL),
-(2, '2020-06-30 11:25:00', 3, 3, NULL),
+(1, '2020-05-11 15:30:00', 1, 6, NULL),
+(2, '2020-06-30 11:25:00', 3, 5, NULL),
 (3, '2020-06-30 09:38:00', 3, 4, NULL),
 (4, '2020-07-01 16:01:00', 2, 1, 1),
-(5, '2020-07-02 13:30:00', 1, 5, 2),
-(6, '2020-07-05 10:58:00', 1, 6, 3);
+(5, '2020-07-02 13:30:00', 1, 2, 2),
+(6, '2020-07-05 10:58:00', 1, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -356,8 +356,8 @@ ALTER TABLE `package_mail`
 --
 ALTER TABLE `postbox`
   ADD PRIMARY KEY (`postbox_id`),
-  ADD KEY `fk_item_id` (`fk_item_id`),
-  ADD KEY `fk_postbox_addresse_id` (`fk_postbox_addresse_id`);
+  ADD KEY `fk_postbox_addresse_id` (`fk_postbox_addresse_id`),
+  ADD KEY `fk_itembox_id` (`fk_itembox_id`) USING BTREE;
 
 --
 -- Indexes for table `postbox_addresse`
@@ -485,8 +485,8 @@ ALTER TABLE `package_mail`
 -- Constraints for table `postbox`
 --
 ALTER TABLE `postbox`
-  ADD CONSTRAINT `postbox_ibfk_1` FOREIGN KEY (`fk_item_id`) REFERENCES `package_mail` (`item_id`),
-  ADD CONSTRAINT `postbox_ibfk_2` FOREIGN KEY (`fk_postbox_addresse_id`) REFERENCES `postbox_addresse` (`postbox_addresse_id`);
+  ADD CONSTRAINT `postbox_ibfk_2` FOREIGN KEY (`fk_postbox_addresse_id`) REFERENCES `postbox_addresse` (`postbox_addresse_id`),
+  ADD CONSTRAINT `postbox_ibfk_3` FOREIGN KEY (`fk_itembox_id`) REFERENCES `package_mail` (`item_id`);
 
 --
 -- Constraints for table `postoffice`
