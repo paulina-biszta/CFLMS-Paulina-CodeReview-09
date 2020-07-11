@@ -13,10 +13,9 @@ SELECT COUNT(item_id)
 FROM package_mail 
 WHERE type = 'package' AND size = 'M';
 
-
 SELECT customer.first_name, customer.last_name, package_mail.type, package_mail.size
 FROM customer
-JOIN package_mail on package_mail.item_id  = customer.fk_customer_id
+JOIN package_mail on package_mail.fk_customer_id  = customer.customer_id
 WHERE type = 'package' AND size = 'M';
 
 /*Post office department addresses of each employee*/
